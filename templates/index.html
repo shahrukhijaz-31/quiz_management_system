@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Login Panel</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <!-- jQuery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <!-- Latest compiled JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   </head>
+   <body class="container" >
+      <h1 class="jumbotron text-center" style="background-color: #052f50;color:white;">Login Panel</h1>
+      <div class="row">
+         <div class="col-sm-3 col-md-3" >
+         </div>
+         <div class="col-sm-3 col-md-6" align="center">
+            <form action="/login" method="POST" style="width: 500px;background-color: #052f50;color: white; padding: 20px;"  >
+               <div class="input-group" >
+                  <span class="input-group-addon">Username</span>
+                  <input type="text" class="form-control" name="username" placeholder="Enter Username..." required="required">
+               </div>
+               <br>
+               <div class="input-group">
+                  <span class="input-group-addon">Password</span>
+                  <input type="password" class="form-control" name="password" placeholder="Enter Password..." required="required">
+               </div>
+               <br>
+               <div class="input-group">
+                  <input type="radio" name="type" value="Teacher" required="required"> Teacher &nbsp;
+                  <input type="radio" name="type" value="Admin" required="Admin "> Admin &nbsp;
+                  <input type="radio" name="type" value="Student" required="required"> Student<br>
+               </div>
+               <br>
+               <input type="submit" class="btn btn-default" value="Login"/>
+            </form>
+         </div>
+         <div class="col-sm-3 col-md-3">
+         </div>
+      </div>
+   </body>
+</html>

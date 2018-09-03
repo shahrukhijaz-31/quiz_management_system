@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Admin Panel</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css">
+      <!-- jQuery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+      <!-- Latest compiled JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <style>
+         .jumbotron{
+         background-color: #238bdc;
+         color:black;
+         }
+      </style>
+   </head>
+   <body class="container">
+      <h2 class="jumbotron text-center">Data Enrollement Panel</h2>
+      <form action="/logout" method="POST" style="float: right;">
+         <input type="submit" value="logout" class="btn btn-danger">
+      </form>
+      <br>
+      <ul class="nav nav-pills">
+         <li class="active"><a data-toggle="pill" href="#teacher">Teacher</a></li>
+         <li><a data-toggle="pill" href="#student">Student</a></li>
+      </ul>
+      <div class="tab-content">
+         <div id="teacher" class="tab-pane fade in active">
+            <h3>Teacher</h3>
+            <form action="/insert_teacher" method="POST">
+               <div class="input-group" >
+                  <span class="input-group-addon">Teacher Name </span>
+                  <input type="text" class="form-control" name="teacher_name" id="teacher_name"  placeholder="Enter Name...">
+               </div>
+               <br>
+               <div class="input-group" >
+                  <span class="input-group-addon">Teacher Password</span>
+                  <input type="password" class="form-control" name="teacher_password" id="teacher_password"  placeholder="Enter Password...">
+               </div>
+               <br>
+               <input type="submit" class="btn btn-primary" value="Register Teacher"/>
+            </form>
+            <br>
+            <table class="display" id="teachers">
+               <thead>
+                  <tr>
+                     <th>ID</th>
+                     <th>Name</th>
+                     <th>Password</th>
+                     <th>Options</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for teacher in user_data["teachers"] %}
+                  <tr>
+                     <td>{{ teacher.id }}</td>
+                     <td>{{ teacher.username }}</td>
+                     <td>{{ teacher.password }}</td>
+                     <td>
+                        <input type="hidden" value="{{ teacher.id }}" name="teacher_id" id="teacher_id"/>
+                        <a class="edit_teacher alert alert-primary">Edit</a>|
+                        <a class="delete_teacher alert alert-primary" href="/delete_teacher/{{ teacher.id }}">Delete</a>
+                     </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+         <div id="student" class="tab-pane fade">
+            <h3>Student</h3>
+            <form action="/insert_student" method="POST">
+               <div class="input-group" >
+                  <span class="input-group-addon">Student Name </span>
+                  <input type="text" class="form-control" name="student_name" id="student_name"  placeholder="Enter Name...">
+               </div>
+               <br>
+               <div class="input-group" >
+                  <span class="input-group-addon">Student Password</span>
+                  <input type="password" class="form-control" name="student_password" id="student_password"  placeholder="Enter Password...">
+               </div>
+               <br>
+               <input type="submit" class="btn btn-primary" value="Register Student"/>
+            </form>
+            <br>
+            <table class="display" id="students">
+               <thead>
+                  <tr>
+                     <th>ID</th>
+                     <th>Name</th>
+                     <th>Password</th>
+                     <th>Options</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for student in user_data["students"] %}
+                  <tr>
+                     <td>{{ student.id }}</td>
+                     <td>{{ student.username }}</td>
+                     <td>{{ student.password }}</td>
+                     <td>
+                        <input type="hidden" value="{{ student.id }}" name="student_id" id="student_id"/>
+                        <a class="edit_student alert alert-primary">Edit</a>|
+                        <a class="delete_student alert alert-primary" href="/delete_student/{{ student.id }}">Delete</a>
+                     </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+      </div>
+      <form action="/update_teacher" method="POST">
+         <div class="modal fade" id="edit_teacher_modal" role="dialog">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                     <h4 class="modal-title">Edit Teacher</h4>
+                  </div>
+                  <div class="modal-body">
+                     <div class="input-group" >
+                        <input type="hidden" id="t_id" name="t_id"/>
+                        <span class="input-group-addon">Teacher Name </span>
+                        <input type="text" class="form-control" name="t_username" id="t_username" >
+                     </div>
+                     <br>
+                     <div class="input-group" >
+                        <span class="input-group-addon">Teacher Password</span>
+                        <input type="text" class="form-control" name="t_password" id="t_password">
+                     </div>
+                     <br>
+                  </div>
+                  <div class="modal-footer">
+                     <input type="submit" class="btn btn-primary" value="Update Teacher"/>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+      <form action="/update_student" method="POST">
+         <!-- Modal -->
+         <div class="modal fade" id="edit_student_modal" role="dialog">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                     <h4 class="modal-title">Edit Teacher</h4>
+                  </div>
+                  <div class="modal-body">
+                     <div class="input-group" >
+                        <input type="hidden" id="s_id" name="s_id"/>
+                        <span class="input-group-addon">Student Name </span>
+                        <input type="text" class="form-control" name="s_username" id="s_username" >
+                     </div>
+                     <br>
+                     <div class="input-group" >
+                        <span class="input-group-addon">Student Password</span>
+                        <input type="text" class="form-control" name="s_password" id="s_password">
+                     </div>
+                     <br>
+                  </div>
+                  <div class="modal-footer">
+                     <input type="submit" class="btn btn-primary" value="Update Student"/>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </body>
+   <script>
+      $(document).ready( function () {
+          $('#teachers').DataTable();
+      });
+   </script>
+   <script>
+      $(document).ready( function () {
+          $('#students').DataTable();
+      });
+   </script>
+   <script>
+      $(function() {
+          $('.edit_teacher').click(function() {
+              var teacher_id = $(this).parentsUntil("tr").children("input").val();
+              $.ajax({
+                  url: '/get_teacher',
+                  type: 'POST',
+                  data: {'teacher_id': teacher_id},
+                  success: function(response) {
+                        teacher = JSON.parse(response);
+                        debugger;
+                        $("#t_username").val(teacher.username);
+                        $("#t_id").val(teacher.id);
+                        $("#t_password").val(teacher.password);
+                        $('#edit_teacher_modal').modal('show');
+                  },
+                  error: function(error) {
+                      alert("Error");
+                      console.log(error);
+                  }
+              });
+      });
+      });
+   </script>
+   <script>
+      $(function() {
+      $('.edit_student').click(function() {
+          var student_id = $(this).parentsUntil("tr").children("input").val();
+          $.ajax({
+              url: '/get_student',
+              type: 'POST',
+              data: {'student_id': student_id},
+              success: function(response) {
+                   student = JSON.parse(response);
+                    $("#s_username").val(student.username);
+                    $("#s_id").val(student.id);
+                    $("#s_password").val(student.password);
+                  $('#edit_student_modal').modal('show');
+              },
+              error: function(error) {
+                  alert("Error");
+                  console.log(error);
+              }
+          });
+      });
+      });
+   </script>
+</html>
